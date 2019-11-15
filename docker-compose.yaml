@@ -1,0 +1,26 @@
+version: "3.4"
+services:
+  postgres:
+    build:
+      dockerfile: postgres.Dockerfile
+      context: .
+    restart: always
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=changeit
+      - POSTGRES_DB=test
+    ports:
+      - "5432:5432"
+  program:
+    build:
+      dockerfile: program.Dockerfile
+      context: .
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432 # change this to 5439 when connecting to redshift
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: changeit
+      POSTGRES_DB: test
+      DIALECT: postgresql # change this to redshift+psycopg2 when connecting to redshift
+      TEST_SCHEMA: test
+      TEST_TABLE: ach_event
